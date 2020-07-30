@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot name="acro_ur5_description" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="world" />
+
+  <!-- ur5 -->
+  <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+  <xacro:ur5_robot prefix="" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+  />
+
+  <joint name="world_to_base_link" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${-45 * pi / 180}" />
+  </joint>
+
+  <!-- Frame on which the robot is mounted -->
+  <material name="grey">
+    <color rgba="0.8 0.8 0.8 1"/>
+  </material>
+
+  <link name="frame">
+    <visual>
+    <geometry>
+      <mesh filename="package://acro_ur5_description/meshes/workcell_aligned.stl"/>
+    </geometry>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+          <mesh filename="package://acro_ur5_description/meshes/workcell_aligned.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="world_to_frame" type="fixed">
+    <parent link="world" />
+    <child link = "frame" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- gripper -->
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_85_gripper.urdf.xacro" />
+
+  <xacro:robotiq_85_gripper prefix="" parent="tool0">
+    <origin xyz="0 0 0" rpy="${-pi / 2} ${-pi / 2} 0"/>
+  </xacro:robotiq_85_gripper>
+
+  <!-- add a tip link in the middle of the gripper -->
+  <link name="gripper_reference"/>
+  <joint name="tool0_to_gripper_reference" type="fixed">
+    <parent link="tool0" />
+    <child link = "gripper_reference" />
+    <origin xyz="0.0 0.0 0.12" rpy="0.0 0.0 0.0" />
+  </joint>
+
+</robot>

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: acro_ur5_description
+    relative_path: urdf/setup.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/acro_ur5_description.srdf
+  CONFIG:
+    author_name: JeroenDM
+    author_email: jeroen.demaeyer@kuleuven.be
+    generated_timestamp: 1596100897
